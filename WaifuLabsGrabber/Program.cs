@@ -28,6 +28,7 @@ namespace WaifuLabsGrabber
             Console.ForegroundColor = ConsoleColor.White;
             Console.Title = "Waifu Generator";
             Directory.CreateDirectory("Waifus");
+            if (File.Exists("seed.txt") == false) { File.Create("seed.txt").Close(); File.WriteAllText("seed.txt", "[973939,973939,973939,973939,378421,378421,378421,378421,378421,378421,378421,378421,70669,70669,70669,70669,0,[59.7175,55.7725,61.47]]"); }
 
             while (true == true)
             {
@@ -199,9 +200,6 @@ namespace WaifuLabsGrabber
                 }
 
             }
-
-
-
 
 
             int imageNo = 1;
