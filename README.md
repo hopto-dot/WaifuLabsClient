@@ -21,4 +21,4 @@ Syntax: `/save [waifu selector]` - save the seed of a waifu to saved_waifus.txt
 log.txt holds all the seeds of the last generation.
 
 ## Known issue: "Failed to convert image to byte array."
-If you see this error, you can trying running the command 1 to 5 more times until it works, if not, give up.
+If you see this error, you can trying running the command 1 to 5 more times until it works, if not, give up. This will be fixed in the future.
