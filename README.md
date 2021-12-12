@@ -2,7 +2,7 @@
 
 When you first launch the program use the command `/dir`, this will take you to the directory of the folder the generated waifus will appear.
 
-The `/gen [waifu selector]` command lets you generate waifus, here is it's parameters:
+The `/gen [waifu selector]` command lets you generate waifus, here is its parameters:
 
 ### Waifu Selection Parameters
 These parameters work for `/gen` and `/save`
