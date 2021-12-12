@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaifuLabsGrabber", "WaifuLabsGrabber\WaifuLabsGrabber.csproj", "{E03D1C8C-2991-4B76-AEAF-708EEA59782B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E03D1C8C-2991-4B76-AEAF-708EEA59782B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E03D1C8C-2991-4B76-AEAF-708EEA59782B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E03D1C8C-2991-4B76-AEAF-708EEA59782B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E03D1C8C-2991-4B76-AEAF-708EEA59782B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2F8C18F-5429-410D-B4B5-340BE2CAD5C4}
+	EndGlobalSection
+EndGlobal
