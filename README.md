@@ -13,3 +13,5 @@ These parameters work for `/gen` and `/save`
 ### Defaults
 * If you don't use the `s` parameter, a default of `s3` will be used.
 * if you don't use the `w` or `l`, the seed inside of seed.txt will be used.
+
+### Known issue: Failed to convert image to byte array.
