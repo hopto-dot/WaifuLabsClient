@@ -2,7 +2,7 @@
 
 When you first launch the program use the command `/dir`, this will take you to the directory of the folder the generated waifus will appear.
 
-The `/gen [waifu selector)` command lets you generate waifus, here is it's parameters:
+The `/gen [waifu selector]` command lets you generate waifus, here is it's parameters:
 
 ### Waifu Selection Parameters
 These parameters work for `/gen` and `/save`
@@ -16,7 +16,7 @@ These parameters work for `/gen` and `/save`
 * if you don't use the `w` or `l`, the seed inside of seed.txt will be used.
 
 ### /save
-Syntax: /save [waifu selector] - save the seed of a waifu to saved_waifus.txt
+Syntax: `/save [waifu selector]` - save the seed of a waifu to saved_waifus.txt
 
 log.txt holds all the seeds of the last generation.
 
