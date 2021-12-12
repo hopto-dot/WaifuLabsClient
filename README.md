@@ -13,6 +13,8 @@ These parameters work for `/gen` and `/save`
 * l - use the seed you used in the last `/gen` command
 * [seed] - you can also use a raw seed. Example: [706925,706925,706925,706925,808825,808825,808825,808825,808825,808825,808825,808825,808825,808825,808825,808825,0,[109.855,96.4925,94.6325]]
 
+[Examples Commands](https://github.com/hopto-dot/WaifuLabsClient/wiki/Example-Commands)
+
 ### Defaults parameters
 * If you don't use the `s` parameter, a default of `s3` will be used.
 * if you don't use the `w` or `l`, the seed inside of seed.txt will be used.
