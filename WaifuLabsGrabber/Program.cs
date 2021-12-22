@@ -254,8 +254,17 @@ namespace WaifuLabsGrabber
 
                             byte[] imageBytes;
                             try
-                            {
-                                imageBytes = Convert.FromBase64String(imageString.Substring(1, imageString.Length - 2));
+                            {   try
+                                {
+                                    imageBytes = Convert.FromBase64String(newWaifuSeed.Substring(1, newWaifuSeed.Length - 2));
+                                }
+                                catch
+                                {
+                                    string base64ImageString = imageString;
+                                    base64ImageString = base64ImageString.Substring(1, base64ImageString.Length - 2);
+
+                                    imageBytes = Convert.FromBase64String(base64ImageString);
+                                }
                             }
                             catch (Exception ex)
                             {
