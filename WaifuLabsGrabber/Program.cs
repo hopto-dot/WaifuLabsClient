@@ -96,14 +96,14 @@ namespace WaifuLabsGrabber
                 int waifuNo = 1;
                 foreach (string seed in File.ReadAllLines("saved_waifus.txt"))
                 {
-                    imagesRequest(requestNo, seed, waifuStep, waifuNo);
+                    imagesRequest2(requestNo, seed, waifuStep, waifuNo);
                     waifuNo += 1;
                 }
-                imagesRequest(requestNo, waifuSeed, waifuStep);
+                imagesRequest2(requestNo, waifuSeed, waifuStep);
             
             }
-            if (parameters[0] == "gen" && waifuStep != 4) { imagesRequest(requestNo, waifuSeed, waifuStep); }
-            if (parameters[0] == "gen" && waifuStep == 4) { imagesRequest(requestNo, waifuSeed, waifuStep, 1); }
+            if (parameters[0] == "gen" && waifuStep != 4) { imagesRequest2(requestNo, waifuSeed, waifuStep); }
+            if (parameters[0] == "gen" && waifuStep == 4) { imagesRequest2(requestNo, waifuSeed, waifuStep, 1); }
             if (parameters[0] == "save") {
                 if (File.Exists("saved_waifus.txt") == false) { File.Create("saved_waifus.txt").Close(); }
 
@@ -112,6 +112,66 @@ namespace WaifuLabsGrabber
                 printSuccess("Saved seed successfully!");
             }
             Console.WriteLine();
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private static void imagesRequest3(int requests = 1, string waifuSeed = "", int waifuStep = 3, int preview = 0)
+        {
+
+        }
+
+        private static void imagesRequest2(int requests = 1, string waifuSeed = "", int waifuStep = 3, int preview = 0)
+        {
+            try
+            {
+                lastGeneration.waifuSeeds.Clear();
+            }
+            catch { }
+            lastGeneration.lastSeed = waifuSeed;
+
+            Console.WriteLine($"Generating {requests * 16} waifus\n" +
+                $"Seed: {waifuSeed}\n" +
+                $"Step: {waifuStep}");
+            Console.WriteLine();
+
+            File.Create("log.txt").Close();
+            string toLog = string.Empty;
+
+            string apiUrl = preview == 0 ? "https://api.waifulabs.com/generate" : "https://api.waifulabs.com/generate_preview";
+            string stringContent = preview == 0 ? "{\"step\":" + waifuStep + ",\"currentGirl\":" + waifuSeed + "}" : "{\"currentGirl\":" + waifuSeed + ",\"product\":\"POSTER\"}";
+
+
+
+            var handler = new HttpClientHandler();
+            handler.UseCookies = false;
+
+            using (var httpClient = new HttpClient(handler))
+            {
+                using (var request = new HttpRequestMessage(new HttpMethod("GET"), "wss://waifulabs.com/creator/socket/websocket?token=SFMyNTY.g2gDZAACb2tuBgDFtKRpfgFiAAFRgA.SMO2YX946XI1OUf8kmmX1RlHrjuUakdGkVCUO7u4cjI&vsn=2.0.0"))
+                {
+                    request.Headers.TryAddWithoutValidation("Pragma", "no-cache");
+                    request.Headers.TryAddWithoutValidation("Origin", "https://waifulabs.com");
+                    request.Headers.TryAddWithoutValidation("Accept-Language", "ja,en-GB;q=0.9,en;q=0.8");
+                    request.Headers.TryAddWithoutValidation("Sec-WebSocket-Key", "j+zz62pf4taC5Rs9ccQqDQ==");
+                    request.Headers.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36");
+                    request.Headers.TryAddWithoutValidation("Upgrade", "websocket");
+                    request.Headers.TryAddWithoutValidation("Sec-WebSocket-Extensions", "permessage-deflate; client_max_window_bits");
+                    request.Headers.TryAddWithoutValidation("Cache-Control", "no-cache");
+                    request.Headers.TryAddWithoutValidation("Connection", "Upgrade");
+                    request.Headers.TryAddWithoutValidation("Sec-WebSocket-Version", "13");
+                    request.Headers.TryAddWithoutValidation("Cookie", "__stripe_mid=97d115f0-2aca-48ee-a69b-0f8ae3de8496a18cab; _waifulab_key=SFMyNTY.g3QAAAABbQAAAAtfY3NyZl90b2tlbm0AAAAYVzgxTV9Kc3lWSWs5SEQ5TkcyaTFjVWdD.4acoEPjSP1AXACWWyXc6ZZtyWjZtrSlNPPMYtZQk7iA; __stripe_sid=1c3084f4-65f0-491a-8738-3580ccab656c9c5354");
+
+                    var response = httpClient.SendAsync(request);
+                    var responseResult = response.Result;
+                    if (responseResult.StatusCode != HttpStatusCode.OK) { printError($"{responseResult.ReasonPhrase}. The provided seed was likely incorrect."); return; }
+
+                    string content = responseResult.Content.ReadAsStringAsync().Result;
+
+
+
+                    Console.WriteLine("Finished");
+                }
+            }
         }
 
         private static void imagesRequest(int requests = 1, string waifuSeed = "", int waifuStep = 3, int preview = 0)
@@ -226,6 +286,7 @@ namespace WaifuLabsGrabber
                         request.Headers.TryAddWithoutValidation("origin", "https://waifulabs.com");
                         request.Headers.TryAddWithoutValidation("sec-fetch-site", "same-site");
                         request.Headers.TryAddWithoutValidation("sec-fetch-mode", "cors");
+                        request.Headers.TryAddWithoutValidation("sec-fetch-mode", "cors");
                         request.Headers.TryAddWithoutValidation("sec-fetch-dest", "empty");
                         request.Headers.TryAddWithoutValidation("referer", "https://waifulabs.com/");
                         request.Headers.TryAddWithoutValidation("accept-language", "ja,en-GB;q=0.9,en;q=0.8");
@@ -293,6 +354,7 @@ namespace WaifuLabsGrabber
             }
             Console.WriteLine($"Generated {requests * 16} waifus!");
         }
+
 
 
 
