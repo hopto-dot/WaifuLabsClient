@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using WebSocketSharp;
 
 namespace WaifuLabsGrabber
 {
@@ -28,7 +29,7 @@ namespace WaifuLabsGrabber
             Console.ForegroundColor = ConsoleColor.White;
             Console.Title = "Waifu Generator";
             Directory.CreateDirectory("Waifus");
-            if (File.Exists("seed.txt") == false) { File.Create("seed.txt").Close(); File.WriteAllText("seed.txt", "[973939,973939,973939,973939,378421,378421,378421,378421,378421,378421,378421,378421,70669,70669,70669,70669,0,[59.7175,55.7725,61.47]]"); }
+            if (File.Exists("seed.txt") == false) { File.Create("seed.txt").Close(); File.WriteAllText("seed.txt", "QTEyOEdDTQ.V6J61z5uS_tMmfzlaO8BR42E6n2S96lO0I4vL2G8lVkYsAsJ_EVX1t6TEf0.w2ToewwpIloL1QBy.zoJdvYkJpZ6IoZ1O8KlFcaJfgUuAFyUit8wbeE6nUWuxAJVwcMrMqYfC87X4L3co6it71qA1ANaEPNGhiL8mRjgUIzLBWlUZzaA-DV8b0blonuCqNUc3NOsZE8PncCPtDdYy9DcQNy7cOhDi2L-8rWoCpLsWR7VjtSY0blmNOY8gyX9VCrXM-uQC2TSOzZn3TxUYmg.5SCTnxuYHxvIetCLDSWTqQ"); }
 
             while (true == true)
             {
@@ -79,31 +80,31 @@ namespace WaifuLabsGrabber
             {
                 if (waifuSeed != "saved")
                 {
-                    if (waifuSeed.Contains("]]") == false || waifuSeed.Contains(",") == false || waifuSeed.Length < 50) { waifuSeed = string.Empty; }
-                    if (waifuSeed == string.Empty) { waifuSeed = File.ReadAllText("seed.txt").Trim(); }
+                    if (waifuSeed.Contains(".") == false || waifuSeed.Length < 50) { waifuSeed = string.Empty; }
+                    if (waifuSeed == string.Empty) { waifuSeed = File.ReadAllText("seed.txt").Trim(); waifuStep = 0; }
                 }
                 
             } catch
             {
                 printWarning("Invalid or no seed provided so used the default.");
-                waifuSeed = "[920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,920420,0,[237.015,184.42,193.775]]";
+                waifuSeed = "QTEyOEdDTQ.vzZqvT1mcMLFkJqcZYQpdlGbJZOBS2YVLJoCRkJIFP4LTDus2x-PxQWIxs4.gI_iRdT-OHuev9dJ.Lr1FWZNBbs1orCRjBE5nz2US1552mJII3VWuxTnz4-uoBkoAuMJVSxF_FhUasomfTLhiNxCFU-VvPcQUrPjjWq7wZKa2PSsi9ueBRgXvDbqS1zSL15uGLzy3CfvTa_RCyX9Mfz1DAFvCbR1Oz1qh_DMWu_7i3UkRLq4q6aQgFfcMQehu1hQWCIovg61mhaO2bPW0Yw.XBcmAnb_VQfxKKfJ2vxFYQ";
             }
 
-            if (waifuStep > 4) { waifuStep = 3; }
+            if (waifuStep > 4) { waifuStep = 0; }
 
 
             if (parameters[0] == "gen" && waifuSeed == "saved") {
                 int waifuNo = 1;
                 foreach (string seed in File.ReadAllLines("saved_waifus.txt"))
                 {
-                    imagesRequest2(requestNo, seed, waifuStep, waifuNo);
+                    imagesRequest3(requestNo, seed, waifuStep, waifuNo);
                     waifuNo += 1;
                 }
-                imagesRequest2(requestNo, waifuSeed, waifuStep);
+                imagesRequest3(requestNo, waifuSeed, waifuStep);
             
             }
-            if (parameters[0] == "gen" && waifuStep != 4) { imagesRequest2(requestNo, waifuSeed, waifuStep); }
-            if (parameters[0] == "gen" && waifuStep == 4) { imagesRequest2(requestNo, waifuSeed, waifuStep, 1); }
+            if (parameters[0] == "gen" && waifuStep != 4) { imagesRequest3(requestNo, waifuSeed, waifuStep); }
+            if (parameters[0] == "gen" && waifuStep == 4) { imagesRequest3(requestNo, waifuSeed, waifuStep, 1); }
             if (parameters[0] == "save") {
                 if (File.Exists("saved_waifus.txt") == false) { File.Create("saved_waifus.txt").Close(); }
 
@@ -115,11 +116,91 @@ namespace WaifuLabsGrabber
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private static void imagesRequest3(int requests = 1, string waifuSeed = "", int waifuStep = 3, int preview = 0)
+        private static void imagesRequest3(int requests = 1, string waifuSeed = "", int waifuStep = 0, int preview = 0)
         {
+            WebSocket webS = new WebSocket("wss://waifulabs.com/creator/socket/websocket?token=SFMyNTY.g2gDZAACb2tuBgBRztpsfgFiAAFRgA.LzTTTBZrKZ2-hcuksApkvV2tW0b5fTFh9JAOgg3P5yc&vsn=2.0.0");
 
+            webS.OnMessage += WebS_OnMessage;
+
+            Console.WriteLine($"Generating 16 waifus\n" +
+                $"Seed: {waifuSeed}\n" +
+                $"Step: {waifuStep}");
+
+            webS.Connect();
+            webS.Send("[\"3\",\"3\",\"api\",\"phx_join\",{}]");
+            webS.Send("[\"3\",\"5\",\"api\",\"phx_leave\",{}]");
+            webS.Send("[null,\"6\",\"api\",\"generate\",{\"id\":1,\"params\":{\"step\":" + waifuStep + "}}]");
+            webS.Send("[\"7\",\"7\",\"api\",\"phx_join\",{}]");
+            //webS.Send("[\"7\",\"8\",\"api\",\"generate\",{\"id\":1,\"params\":{\"step\":" + waifuStep + "}}]");
+            //["3","6","api","generate_big",{"id":1,"params":{"currentGirl":"QTEyOEdDTQ.V6J61z5uS_tMmfzlaO8BR42E6n2S96lO0I4vL2G8lVkYsAsJ_EVX1t6TEf0.w2ToewwpIloL1QBy.zoJdvYkJpZ6IoZ1O8KlFcaJfgUuAFyUit8wbeE6nUWuxAJVwcMrMqYfC87X4L3co6it71qA1ANaEPNGhiL8mRjgUIzLBWlUZzaA-DV8b0blonuCqNUc3NOsZE8PncCPtDdYy9DcQNy7cOhDi2L-8rWoCpLsWR7VjtSY0blmNOY8gyX9VCrXM-uQC2TSOzZn3TxUYmg.5SCTnxuYHxvIetCLDSWTqQ"}}]
+            webS.Send("[\"3\",\"8\",\"api\",\"generate\",{\"id\":1,\"params\":{\"step\":" + waifuStep + ",\"currentGirl\":\"" + waifuSeed + "\"}}]");
+
+            lastGeneration.lastSeed = waifuSeed;
         }
 
+        private static void WebS_OnMessage(object sender, MessageEventArgs e)
+        {
+            if (e.Data.Contains("newGirls")) { processResponse(e.Data); }
+            else if (e.Data.Contains("error")) { Console.WriteLine("Something went wrong"); }
+        }
+        private static void processResponse(string response)
+        {
+            var newGirls = JArray.Parse(response).Last.First.First.First.First.First.First;
+            
+            try
+            {
+                lastGeneration.waifuSeeds.Clear();
+            }
+            catch { }
+
+            File.Create("log.txt").Close();
+            string toLog = string.Empty;
+
+            List<string> imageResponses = new List<string>();
+
+            int imageNo = 1;
+            foreach (JToken seed in newGirls)
+            {
+                var jsonDouble = seed;
+
+                string imageString = Newtonsoft.Json.JsonConvert.SerializeObject(jsonDouble.First.First);
+                string newWaifuSeed = Newtonsoft.Json.JsonConvert.SerializeObject(jsonDouble.Last.First);
+                imageString = imageString.Substring(1, imageString.Length - 2);
+                newWaifuSeed = newWaifuSeed.Substring(1, newWaifuSeed.Length - 2);
+
+                imageResponses.Add(newWaifuSeed);
+                toLog += $"{imageNo}:{newWaifuSeed}\n";
+                lastGeneration.waifuSeeds.Add(newWaifuSeed);
+
+                
+
+                byte[] imageBytes;
+                try
+                {
+                    imageBytes = Convert.FromBase64String(imageString);
+                }
+                catch (Exception ex)
+                {
+                    printError($"Failed to convert image {imageNo} to byte array.");
+                    printError(ex.Message);
+                    printError($"imageString = {imageString}");
+                    printError($"newWaifuSeed.length = {newWaifuSeed.Length}");
+                    return;
+                }
+                Bitmap bmp;
+                using (var ms = new MemoryStream(imageBytes))
+                {
+                    bmp = new Bitmap(ms);
+                    bmp.Save($"Waifus/Waifu{imageNo}.jpeg");
+                }
+                imageNo += 1;
+            }
+            File.WriteAllText("log.txt", toLog);
+            Console.WriteLine("Done!");
+            return;
+        }
+
+        
         private static void imagesRequest2(int requests = 1, string waifuSeed = "", int waifuStep = 3, int preview = 0)
         {
             try
